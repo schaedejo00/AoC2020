@@ -1,7 +1,7 @@
 from graph_tools import Graph
 import re
 
-from numpy import mat
+#work in progress
 
 with open('input_tst2.txt', 'r') as f:
     lines = f.readlines()
