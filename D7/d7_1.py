@@ -1,26 +1,40 @@
-from graph_tools import Graph
 import re
 
 #work in progress
+def contains(items, value):
+    for i in items:
+        #print(i, i[0][1], value)
+        if len(i) > 0 and i[0][1] == value:
+            #print(True)
+            return True
+    return False
 
-with open('input_tst2.txt', 'r') as f:
+with open('input.txt', 'r') as f:
     lines = f.readlines()
 
-g = Graph(directed=True)
-pattern = re.compile("([a-z]+ [a-z]+) bags contain (( ?[0-9]+ [a-z]+ [a-z]+ bags?,?)+| ?no other bags)\.")
-neighbourPattern = re.compile("(([0-9]+ [a-z]+ [a-z]+) bags?,?)+")
+pattern = re.compile("([0-9]+) ([a-z]+ [a-z]+)")
+bags = {}
 for line in lines:
-    matches = pattern.findall(line)
-    print(matches[0][0])
+    line = line.replace(" bags", "").replace(" bag", "").replace(".\n", "")
+    outer, inner = line.split(' contain ')
 
-    start = matches[0][0]
-    neighbours = matches[0][1]
+    inner = inner.split(', ')
+    inner = [pattern.findall(x) for x in inner]
+    print(outer, inner)
+    bags[outer]=inner
 
+print(bags)
+targets = set()
+targets.add('shiny gold')
+result = set()
 
+while len(targets)>0:
+    current = targets.pop()
+    for k, v in bags.items():
+        if contains(v, current):
+            result.add(k)
+            targets.add(k)
 
-    g.add_vertex(start)
+print(len(result), result)
 
-    if neighbours != 'no other bags':
-        nMatches = neighbourPattern.findall(neighbours)
-        print(nMatches)
 
